@@ -1,0 +1,111 @@
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+    networks:
+      - kafka-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    ports:
+      - "9092:9092"
+    networks:
+      - kafka-network
+
+  producer:
+    build: ./producer
+    container_name: hospital-producer
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_SERVER: kafka:9092
+    networks:
+      - kafka-network
+    restart: unless-stopped
+
+  pyflink-job:
+    build: ./pyflink-job
+    container_name: pyflink-consumer
+    depends_on:
+      kafka:
+        condition: service_started
+      clickhouse:
+        condition: service_started
+    entrypoint: >
+      /bin/sh -c " echo '=== Checking JAR files ==='; ls -lah /opt/flink/lib/ | grep -E '(kafka|jdbc|clickhouse)'; echo ''; echo '=== Waiting for Kafka to be ready ==='; for i in {1..60}; do nc -z kafka 9092 && echo 'Kafka is ready!' && break || (echo 'Attempt '$$i': Kafka not ready yet...'; sleep 2); done; echo ''; echo '=== Waiting for ClickHouse to be ready ==='; for i in {1..60}; do nc -z clickhouse 8123 && echo 'ClickHouse is ready!' && break || (echo 'Attempt '$$i': ClickHouse not ready yet...'; sleep 2); done; echo ''; echo '=== Starting Flink consumer job ==='; python3 /opt/flink/consumer.py "
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      KAFKA_TOPIC: hospital_vitals
+      FLINK_ENV_LOG_DIR: /tmp
+      metrics.reporters: prom
+      metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter
+      metrics.reporter.prom.port: 9249
+    networks:
+      - kafka-network
+    restart: unless-stopped
+    ports:
+      - "9249:9249"
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - ./clickhouse-init:/docker-entrypoint-initdb.d/
+      - ./clickhouse-init/prometheus.xml:/etc/clickhouse-server/config.d/prometheus.xml
+    networks:
+      - kafka-network
+    environment:
+      CLICKHOUSE_DB: hospital
+      CLICKHOUSE_USER: user
+      CLICKHOUSE_PASSWORD: password
+      CLICKHOUSE_PROMETHEUS_ENDPOINT: "/metrics"
+      CLICKHOUSE_PROMETHEUS_PORT: 9363
+  grafana:
+    image: grafana/grafana:10.4.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_INSTALL_PLUGINS=grafana-clickhouse-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - clickhouse
+    networks:
+      - kafka-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - kafka-network
+
+volumes:
+  grafana_data:
+
+networks:
+  kafka-network:
+    driver: bridge
