@@ -10,6 +10,7 @@ from pyflink.datastream.connectors.kafka import KafkaSource, KafkaOffsetsInitial
 from pyflink.common.serialization import SimpleStringSchema
 from pyflink.common.watermark_strategy import WatermarkStrategy
 from pyflink.common.time import Time
+from pyflink.common import Configuration
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s', stream=sys.stdout)
 logger = logging.getLogger(__name__)
@@ -219,7 +220,13 @@ class WriteAggToClickHouse(MapFunction):
 # -----------------------------------------------------------------------------
 print("[MAIN] Starting PyFlink job...", flush=True)
 
-env = StreamExecutionEnvironment.get_execution_environment()
+config = Configuration()
+config.set_string("metrics.reporters", "prom")
+config.set_string("metrics.reporter.prom.factory.class", "org.apache.flink.metrics.prometheus.PrometheusReporterFactory")
+config.set_string("metrics.reporter.prom.port", "9249")
+config.set_string("metrics.reporter.prom.bindAddress", "0.0.0.0")
+
+env = StreamExecutionEnvironment.get_execution_environment(config)
 env.set_parallelism(1)
 
 source = (

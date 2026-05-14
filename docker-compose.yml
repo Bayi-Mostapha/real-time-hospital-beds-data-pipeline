@@ -47,18 +47,15 @@ services:
         condition: service_started
     entrypoint: >
       /bin/sh -c " echo '=== Checking JAR files ==='; ls -lah /opt/flink/lib/ | grep -E '(kafka|jdbc|clickhouse)'; echo ''; echo '=== Waiting for Kafka to be ready ==='; for i in {1..60}; do nc -z kafka 9092 && echo 'Kafka is ready!' && break || (echo 'Attempt '$$i': Kafka not ready yet...'; sleep 2); done; echo ''; echo '=== Waiting for ClickHouse to be ready ==='; for i in {1..60}; do nc -z clickhouse 8123 && echo 'ClickHouse is ready!' && break || (echo 'Attempt '$$i': ClickHouse not ready yet...'; sleep 2); done; echo ''; echo '=== Starting Flink consumer job ==='; python3 /opt/flink/consumer.py "
+    ports:
+      - "9249:9249"
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_TOPIC: hospital_vitals
       FLINK_ENV_LOG_DIR: /tmp
-      metrics.reporters: prom
-      metrics.reporter.prom.class: org.apache.flink.metrics.prometheus.PrometheusReporter
-      metrics.reporter.prom.port: 9249
     networks:
       - kafka-network
     restart: unless-stopped
-    ports:
-      - "9249:9249"
 
   clickhouse:
     image: clickhouse/clickhouse-server:latest

@@ -8,9 +8,12 @@ RUN apt-get update && \
 COPY requirements.txt /tmp/
 RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 
-RUN cp /opt/flink/plugins/metrics-prometheus/flink-metrics-prometheus-1.18.1.jar /opt/flink/lib/
-
 RUN wget -q -O /opt/flink/lib/flink-sql-connector-kafka-3.1.0-1.18.jar \
     https://repo1.maven.org/maven2/org/apache/flink/flink-sql-connector-kafka/3.1.0-1.18/flink-sql-connector-kafka-3.1.0-1.18.jar
+
+RUN cp /opt/flink/plugins/metrics-prometheus/flink-metrics-prometheus-1.18.1.jar /opt/flink/lib/
+
+# ✅ Inject metrics config before the job starts
+COPY flink-conf.yaml /opt/flink/conf/flink-conf.yaml
 
 COPY consumer.py /opt/flink/consumer.py
