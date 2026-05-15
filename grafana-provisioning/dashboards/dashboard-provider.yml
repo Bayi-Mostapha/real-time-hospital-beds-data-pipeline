@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: 'RealTimePipeline' # A name for this group of dashboards
+    orgId: 1
+    folder: 'Hospital System' # The UI folder where they will appear
+    type: file
+    disableDeletion: false
+    editable: true # Set to true if you want to keep tweaking them in the UI
+    options:
+      path: /etc/grafana/provisioning/dashboards # This is the internal container path
