@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "dfm0y6d6882rka"
+        "uid": "prometheus-uid"
       },
       "description": "how many hospital vital records are being processed.",
       "fieldConfig": {
@@ -104,7 +104,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "dfm0y6d6882rka"
+            "uid": "prometheus-uid"
           },
           "editorMode": "code",
           "expr": "rate(flink_taskmanager_job_task_operator_numRecordsOutPerSecond[1m])",
@@ -120,7 +120,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "dfm0y6d6882rka"
+        "uid": "prometheus-uid"
       },
       "description": "monitoring jvm heap since flink uses it",
       "fieldConfig": {
@@ -201,7 +201,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "dfm0y6d6882rka"
+            "uid": "prometheus-uid"
           },
           "editorMode": "code",
           "expr": "flink_taskmanager_Status_JVM_Memory_Heap_Used",
@@ -217,7 +217,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "dfm0y6d6882rka"
+        "uid": "prometheus-uid"
       },
       "fieldConfig": {
         "defaults": {
@@ -270,7 +270,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "dfm0y6d6882rka"
+            "uid": "prometheus-uid"
           },
           "editorMode": "code",
           "expr": "flink_jobmanager_job_uptime",
@@ -286,7 +286,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "dfm0y6d6882rka"
+        "uid": "prometheus-uid"
       },
       "description": "shows if Flink is falling behind the Kafka producer.",
       "fieldConfig": {
@@ -339,7 +339,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "dfm0y6d6882rka"
+            "uid": "prometheus-uid"
           },
           "editorMode": "code",
           "expr": "sum(flink_taskmanager_job_task_operator_KafkaSourceReader_KafkaConsumer_records_lag_max)",

@@ -25,7 +25,7 @@
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "afm2hhcvtoyyof"
+        "uid": "clickhouse-uid"
       },
       "fieldConfig": {
         "defaults": {
@@ -105,7 +105,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "afm2hhcvtoyyof"
+            "uid": "clickhouse-uid"
           },
           "editorType": "sql",
           "format": 1,
@@ -131,7 +131,7 @@
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "afm2hhcvtoyyof"
+        "uid": "clickhouse-uid"
       },
       "fieldConfig": {
         "defaults": {
@@ -210,7 +210,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "afm2hhcvtoyyof"
+            "uid": "clickhouse-uid"
           },
           "editorType": "sql",
           "format": 1,
@@ -236,7 +236,7 @@
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "afm2hhcvtoyyof"
+        "uid": "clickhouse-uid"
       },
       "fieldConfig": {
         "defaults": {
@@ -291,7 +291,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "afm2hhcvtoyyof"
+            "uid": "clickhouse-uid"
           },
           "editorType": "sql",
           "format": 1,
@@ -328,7 +328,7 @@
         },
         "datasource": {
           "type": "grafana-clickhouse-datasource",
-          "uid": "afm2hhcvtoyyof"
+          "uid": "clickhouse-uid"
         },
         "definition": "SELECT DISTINCT bed_id FROM hospital.vitals_raw",
         "hide": 0,

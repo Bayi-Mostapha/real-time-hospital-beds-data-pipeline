@@ -86,6 +86,7 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana-provisioning/data-sources:/etc/grafana/provisioning/datasources
     depends_on:
       - clickhouse
     networks:
