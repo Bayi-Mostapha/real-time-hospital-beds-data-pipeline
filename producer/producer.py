@@ -9,7 +9,7 @@ import confluent_kafka.admin as admin
 # Configuration
 KAFKA_TOPIC = 'hospital_vitals'
 KAFKA_SERVER = os.getenv('KAFKA_SERVER', 'kafka:9092')
-NUM_BEDS = 100  
+NUM_BEDS = 1000  
 PUSH_INTERVAL = 0.5
 
 def ensure_topic_exists():
