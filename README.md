@@ -131,12 +131,10 @@ ORDER BY (window_start, bed_id);
 Provisioned automatically from `grafana-provisioning/` on container start. No manual setup required.
 
 ### Hospital Beds — `hospital_beds.json`
-
-<!-- Add screenshot here -->
+![Hospital Beds Dashboard](readme-images/beds.png)
 
 ### Pipeline Monitor — `pipeline_monitor.json`
-
-<!-- Add screenshot here -->
+![Pipeline Monitor Dashboard](readme-images/pipeline%20monitor.png)
 
 ---
 
