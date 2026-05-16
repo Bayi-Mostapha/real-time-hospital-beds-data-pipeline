@@ -315,7 +315,7 @@
       "type": "gauge"
     }
   ],
-  "refresh": "5s",
+  "refresh": "500ms",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -352,7 +352,10 @@
   },
   "timepicker": {
     "refresh_intervals": [
-      "5s"
+      "500ms",
+      "1s",
+      "5s",
+      "10s"
     ]
   },
   "timezone": "browser",

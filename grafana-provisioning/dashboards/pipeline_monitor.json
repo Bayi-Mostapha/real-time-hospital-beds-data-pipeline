@@ -353,6 +353,7 @@
       "type": "gauge"
     }
   ],
+  "refresh": "500ms",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -362,7 +363,14 @@
     "from": "now-6h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+     "refresh_intervals": [
+      "500ms",
+      "1s",
+      "5s",
+      "10s"
+    ]
+  },
   "timezone": "browser",
   "title": "pipeline monitor",
   "uid": "afm2h1nvo0buoc",
