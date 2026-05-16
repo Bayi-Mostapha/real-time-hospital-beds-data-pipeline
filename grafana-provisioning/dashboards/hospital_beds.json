@@ -18,7 +18,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -121,7 +120,7 @@
           },
           "pluginVersion": "4.17.0",
           "queryType": "table",
-          "rawSql": "SELECT\r\n    window_start::timestamp AS time,\r\n    avg_heart_rate\r\nFROM hospital.vitals_agg\r\nWHERE bed_id = '$bed_id'\r\nORDER BY time ASC",
+          "rawSql": "SELECT\r\n    toDateTime(recorded_at, 'UTC') AS time,\r\n    heart_rate\r\nFROM hospital.vitals_raw\r\nWHERE bed_id = '$bed_id'\r\n  AND toDateTime(recorded_at, 'UTC') >= $__fromTime\r\n  AND toDateTime(recorded_at, 'UTC') <= $__toTime\r\nORDER BY time ASC\r\nLIMIT 100",
           "refId": "A"
         }
       ],
@@ -226,7 +225,7 @@
           },
           "pluginVersion": "4.17.0",
           "queryType": "table",
-          "rawSql": "SELECT\r\n    recorded_at::timestamp AS time,\r\n    heart_rate\r\nFROM hospital.vitals_raw\r\nWHERE bed_id = '$bed_id'\r\nORDER BY time ASC\r\nLIMIT 100",
+          "rawSql": "-- vitals_raw panel\r\nSELECT\r\n    recorded_at::timestamp AS time,\r\n    heart_rate\r\nFROM hospital.vitals_raw\r\nWHERE bed_id = '$bed_id'\r\n  AND $__timeFilter(recorded_at::timestamp)    -- ADD THIS\r\nORDER BY time ASC\r\nLIMIT 100",
           "refId": "A"
         }
       ],
@@ -315,7 +314,7 @@
       "type": "gauge"
     }
   ],
-  "refresh": "500ms",
+  "refresh": "",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
@@ -323,8 +322,8 @@
       {
         "current": {
           "selected": true,
-          "text": "BED_00001",
-          "value": "BED_00001"
+          "text": "BED_00776",
+          "value": "BED_00776"
         },
         "datasource": {
           "type": "grafana-clickhouse-datasource",
@@ -347,8 +346,8 @@
     ]
   },
   "time": {
-    "from": "2026-05-14T19:31:30.000Z",
-    "to": "2026-05-14T19:32:20.000Z"
+    "from": "2026-05-16T13:14:49.000Z",
+    "to": "2026-05-16T13:15:20.000Z"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -361,6 +360,6 @@
   "timezone": "browser",
   "title": "hospital beds",
   "uid": "efm2hsaxc270gb",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }

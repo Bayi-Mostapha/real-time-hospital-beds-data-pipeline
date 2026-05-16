@@ -100,7 +100,7 @@ class WriteToClickHouse(MapFunction):
         if record is None:
             return "skip"
 
-        print(f"[CH] Attempting insert: {record['bed_id']}", flush=True)
+        # print(f"[CH] Attempting insert: {record['bed_id']}", flush=True)
         try:
             self._get_client().insert(
                 "vitals_raw",
@@ -119,7 +119,7 @@ class WriteToClickHouse(MapFunction):
                     "blood_pressure_sys", "glucose", "respiration_rate", "recorded_at",
                 ],
             )
-            print(f"[CH] INSERT OK: {record['bed_id']}", flush=True)
+            # print(f"[CH] INSERT OK: {record['bed_id']}", flush=True)
         except Exception as e:
             print(f"[CH ERROR] {type(e).__name__}: {e}", flush=True)
             import traceback
@@ -206,7 +206,7 @@ class WriteAggToClickHouse(MapFunction):
                     "record_count", "window_start", "window_end",
                 ],
             )
-            print(f"[AGG-CH] INSERT OK: {record['bed_id']} window={record['window_start']}", flush=True)
+            # print(f"[AGG-CH] INSERT OK: {record['bed_id']} window={record['window_start']}", flush=True)
         except Exception as e:
             print(f"[AGG-CH ERROR] {type(e).__name__}: {e}", flush=True)
             import traceback
